@@ -1,18 +1,17 @@
-sudo yum update -y
-sudo yum install wget -y
-sudo yum install java-17-amazon-corretto-jmods -y
-sudo mkdir /app && cd /app
-sudo wget https://download.sonatype.com/nexus/3/nexus-3.79.1-04-linux-x86_64.tar.gz
-sudo tar -xvf nexus-3.79.1-04-linux-x86_64.tar.gz
-sudo mv nexus-3.79.1-04 nexus
-sudo adduser nexus
-sudo chown -R nexus:nexus /app/nexus
-sudo chown -R nexus:nexus /app/sonatype*
-sudo sed -i '27  run_as_user="nexus"' /app/nexus/bin/nexus
-sudo tee /etc/systemd/system/nexus.service > /dev/null << EOL
-[Unit]
-Description=nexus service
-After=network.target
+yum install java-21-amazon-corretto -y
+cd /opt
+wget https://download.sonatype.com/nexus/3/nexus-3.96.0-09-linux-x86_64.tar.gz
+tar -zxvf nexus-3.96.0-09-linux-x86_64.tar.gz
+useradd nexus
+chown -R nexus:nexus nexus-3.96.0-09 sonatype-work
+
+Starting Nexus Service
+*** We have switch into nexus user and start,restart or stop service and switch to the nexus path also ***
+
+su - nexus
+cd /opt/nexus-3.96.0-09/bin/
+./nexus start
+
 
 [Service]
 Type=forking
