@@ -6,11 +6,19 @@ docker-compose version
 
 
 #buildx commands
-# Get the tag name of the latest release
-BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep -oP '"tag_name": "\K[^"]+')
-# Detect architecture and download
+mkdir -p /root/.docker/cli-plugins
 ARCH=$(uname -m)
-if [ "$ARCH" = "x86_64" ]; then ARCH="amd64"; elif [ "$ARCH" = "aarch64" ]; then ARCH="arm64"; fi
-curl -Lo ~/.docker/cli-plugins/docker-buildx "https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.linux-${ARCH}"
-chmod +x ~/.docker/cli-plugins/docker-buildx
-docker buildx version
+if [ "$ARCH" = "x86_64" ]; then
+    ARCH="amd64"
+elif [ "$ARCH" = "aarch64" ]; then
+    ARCH="arm64"
+else
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+fi
+VERSION=$(curl -fsSL https://api.github.com/repos/docker/buildx/releases/latest \
+    | grep '"tag_name":' | head -n 1 | cut -d '"' -f 4)
+curl -fL \
+    "https://github.com/docker/buildx/releases/download/${VERSION}/buildx-${VERSION}.linux-${ARCH}" \
+    -o /root/.docker/cli-plugins/docker-buildx
+chmod +x /root/.docker/cli-plugins/docker-buildx
