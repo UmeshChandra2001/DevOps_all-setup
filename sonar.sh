@@ -10,5 +10,5 @@ chmod 777 sonarqube-26.8.0.126808 -R
 su - sonar
 
 #run this on server manually
-#sh /opt/sonarqube-26.8.0.126808/bin/linux/sonar.sh start
+#sh /opt/sonarqube-26.8.0.126808/bin/linux-x86-64/sonar.sh start
 #echo "user=admin & password=admin"
